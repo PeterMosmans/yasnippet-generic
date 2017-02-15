@@ -1,0 +1,102 @@
+# -*- mode: snippet -*-
+# name: Python boilerplate
+# key: boilerplate
+# --
+#!/usr/bin/env python
+
+"""
+$1 - $2
+
+Copyright (C) 2017 Peter Mosmans [Go Forward]
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+"""
+
+
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+
+import argparse
+import logging
+import sys
+import textwrap
+
+VERSION = '0.1'
+
+
+class LogFormatter(logging.Formatter):
+    """
+    Class to format log messages based on their type.
+    """
+    FORMATS = {logging.DEBUG: "[d] %(message)s",
+               logging.INFO: "[*] %(message)s",
+               logging.ERROR: "[-] %(message)s",
+               logging.CRITICAL: "[-] FATAL: %(message)s",
+               'DEFAULT': "%(message)s"}
+
+    def format(self, record):
+        self._fmt = self.FORMATS.get(record.levelno, self.FORMATS['DEFAULT'])
+        return logging.Formatter.format(self, record)
+
+
+def parse_arguments(banner):
+    """
+    Parse and return command line arguments.
+    """
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=textwrap.dedent(banner + '''\
+ - $2
+
+Copyright (C) 2017 Peter Mosmans [Go Forward]
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.'''))
+    parser.add_argument('target', nargs='?', type=str,
+                        help="""[PARAMETER] can be TODO""")
+    parser.add_argument('--debug', action='store_true',
+                        help='Show debug information')
+    parser.add_argument('-v', '--verbose', action='store_true',
+                        help='Be more verbose')
+    args = parser.parse_args()
+    if not args.target:
+        parser.print_help()
+        sys.exit(0)
+    return args
+
+
+def setup_logging(args):
+    """
+    Set up loghandlers according to options.
+    """
+    logger = logging.getLogger()
+    logger.setLevel(0)
+    console = logging.StreamHandler(stream=sys.stdout)
+    console.setFormatter(LogFormatter())
+    if args.debug:
+        console.setLevel(logging.DEBUG)
+    elif args.verbose:
+        console.setLevel(logging.INFO)
+    else:
+        console.setLevel(logging.ERROR)
+    logger.addHandler(console)
+
+
+def main():
+    """
+    Main program loop.
+    """
+    banner = '$1 version {0}'.format(VERSION)
+    args = parse_arguments(banner)
+    setup_logging(args)
+    logging.info('%s starting', banner)
+
+
+if __name__ == "__main__":
+    main()
