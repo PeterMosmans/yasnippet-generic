@@ -3,6 +3,7 @@
 # key: boilerplate
 # --
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
 """
 $1 - $2
@@ -65,9 +66,9 @@ the Free Software Foundation, either version 3 of the License, or
     parser.add_argument('-v', '--verbose', action='store_true',
                         help='Be more verbose')
     args = parser.parse_args()
-    if not args.target:
-        parser.print_help()
-        sys.exit(0)
+    # if not args.target:
+    #     parser.print_help()
+    #     sys.exit(0)
     return args
 
 
