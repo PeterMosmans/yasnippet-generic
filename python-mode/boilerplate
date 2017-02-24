@@ -78,15 +78,12 @@ def setup_logging(args):
     """
     logger = logging.getLogger()
     logger.setLevel(0)
-    console = logging.StreamHandler(stream=sys.stdout)
+    console = logger.handlers[0]
     console.setFormatter(LogFormatter())
     if args.debug:
         console.setLevel(logging.DEBUG)
-    elif args.verbose:
-        console.setLevel(logging.INFO)
     else:
-        console.setLevel(logging.ERROR)
-    logger.addHandler(console)
+        console.setLevel(logging.INFO)
 
 
 def main():
