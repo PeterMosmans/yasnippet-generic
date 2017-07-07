@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: code directive
+# key: code
+# expand-env: ((yas-indent-line 'fixed) (yas-wrap-around-region 'nil))
+# --
+.. code-block:: ${1:console}
+
+   $0
